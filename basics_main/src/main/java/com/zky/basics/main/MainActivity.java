@@ -6,17 +6,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.zky.basics.common.mvvm.BaseActivity;
-import com.zky.basics.common.provider.IMapProvider;
+import com.zky.basics.common.provider.ILiveProvider;
 import com.zky.basics.common.provider.IMineProvider;
 import com.zky.basics.main.entity.MainChannel;
 
 
 public class MainActivity extends BaseActivity  {
 
-    @Autowired(name = "/map/main")
-    IMapProvider mMapProvider;
+    @Autowired(name = "/live/main")
+    ILiveProvider iLiveProvider;
     @Autowired(name = "/me/main")
     IMineProvider mMineProvider;
 
@@ -55,14 +56,14 @@ public class MainActivity extends BaseActivity  {
             }
         });
 
-        if (mMapProvider != null) {
-            mFlayFragment = mMapProvider.getMapFragment();
+        if (iLiveProvider != null) {
+            mFlayFragment = iLiveProvider.getMainLiveFragment();
         }
         if (mMineProvider != null) {
             mMeFragment = mMineProvider.getMainMineFragment();
         }
         mCurrFragment = mFlayFragment;
-        if (mMeFragment != null) {
+        if (iLiveProvider != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, mFlayFragment, MainChannel.NEWS.name).commit();
         }
     }
