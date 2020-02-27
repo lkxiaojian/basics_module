@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.zky.basics.api.RetrofitManager;
 import com.zky.basics.api.dto.RespDTO;
@@ -21,21 +22,28 @@ import com.zky.basics.api.splash.ImageUrl;
 import com.zky.basics.api.splash.RegionOrSchoolBean;
 import com.zky.basics.common.event.SingleLiveEvent;
 import com.zky.basics.common.mvvm.viewmodel.BaseViewModel;
-import com.zky.basics.common.util.*;
+import com.zky.basics.common.util.DisplayUtil;
+import com.zky.basics.common.util.InfoVerify;
+import com.zky.basics.common.util.MD5UtlisKt;
+import com.zky.basics.common.util.NetUtil;
+import com.zky.basics.common.util.SPUtils;
+import com.zky.basics.common.util.ToastUtil;
+import com.zky.basics.common.util.Verify;
 import com.zky.basics.common.view.PopupWindowUtilKt;
 import com.zky.basics.main.R;
 import com.zky.basics.main.activity.FrogetActivity;
 import com.zky.basics.main.activity.RegistActivity;
 import com.zky.basics.main.entity.bean.SplashViewBean;
 import com.zky.basics.main.mvvm.model.SplashModel;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import views.ViewOption.OptionsPickerBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import views.ViewOption.OptionsPickerBuilder;
 
 
 public class SplashViewModel extends BaseViewModel<SplashModel> {
@@ -139,7 +147,7 @@ public class SplashViewModel extends BaseViewModel<SplashModel> {
             if (accountLevel == 5) {
                 Object phone = SPUtils.get(getApplication(), "phone", "");
                 Object pwd = SPUtils.get(getApplication(), phone.toString(), "");
-                if(!phone.toString().equals(name.get())||!pwd.toString().equals(paw.get())){
+                if (!phone.toString().equals(name.get()) || !pwd.toString().equals(paw.get())) {
                     ToastUtil.showToast("账号密码错误");
                     return;
                 }
@@ -772,8 +780,10 @@ public class SplashViewModel extends BaseViewModel<SplashModel> {
     };
 
     private void resume() {
-        timer.cancel();
-        timerTask.cancel();
+        if (timer != null) {
+            timer.cancel();
+            timerTask.cancel();
+        }
         data.get().setTimeMeesage("获取");
         data.set(splashViewBean);
         time = 60;
